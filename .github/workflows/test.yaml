@@ -1,7 +1,7 @@
 name: GitFlow Workflow
 
 on:
-  repository_dispatch:
+  workflow_dispatch:
     inputs:
       action:
         type: choice
