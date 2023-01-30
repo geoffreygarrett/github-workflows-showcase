@@ -34,8 +34,6 @@ jobs:
       - name: Finish Feature
         if: github.event.inputs.action == 'finish_feature'
         run: |
-          git config --global user.name "${{ secrets.GIT_NAME }}"
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
           git branch feature/${{ github.event.inputs.feature_name }}
           git flow feature finish ${{ github.event.inputs.feature_name }}
           git commit -m "feat(${{ github.event.inputs.feature_name }}): Finished and merged to `develop`"
@@ -45,8 +43,6 @@ jobs:
       - name: Start Feature
         if: github.event.inputs.action == 'start_feature'
         run: |
-          git config --global user.name "${{ secrets.GIT_NAME }}"
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
           git flow feature start ${{ github.event.inputs.feature_name }}
           git commit -m "feat(${{ github.event.inputs.feature_name }}): Created from `develop`"
           git push -u origin feature/${{ github.event.inputs.feature_name }}
