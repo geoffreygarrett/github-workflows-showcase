@@ -48,3 +48,19 @@ jobs:
         run: |
           git flow feature start ${{ github.event.inputs.feature_name }}
           git push -u origin feature/${{ github.event.inputs.feature_name }}
+          
+      - name: repository-dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          repository: ${{ github.repository }}
+          event-type: push to ${{ github.repository }}
+          client-payload: >-
+            {
+            "event": "${{ github.event_name }}",
+            "actor": "${{ github.actor }}",
+            "repository": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "ref_name": "${{ github.ref_name }}",
+            "ref_type": "${{ github.ref_type }}",
+            "sha": "${{ github.sha }}"
+            }
