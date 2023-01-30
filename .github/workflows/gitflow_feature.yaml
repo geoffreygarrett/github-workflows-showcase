@@ -42,7 +42,6 @@ jobs:
           git branch feature/${{ github.event.inputs.feature_name }}
           git flow feature finish ${{ github.event.inputs.feature_name }}
           git commit -m "feat(${{ github.event.inputs.feature_name }}): Finished and merged to `develop`"
-          git push origin develop
           git push origin --delete feature/${{ github.event.inputs.feature_name }}
           
       - name: Start Feature
