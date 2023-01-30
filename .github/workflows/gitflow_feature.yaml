@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        type: string
+        type: choice
         description: Choose the action to perform
         options:
         - finish_feature
