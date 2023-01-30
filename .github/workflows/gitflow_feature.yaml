@@ -20,26 +20,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Ensure Feature Branch Doesn't Already Exist
-        if: github.event.inputs.action == 'start_feature'
-        run: |
-          if git rev-parse --verify feature/${{ github.event.inputs.feature_name }} >/dev/null 2>&1; then
-            echo "Feature branch already exists!"
-            exit 1
-          else
-            echo "Feature branch does not exist, creating now..."
-            git checkout develop
-            git pull
-            git checkout -b feature/${{ github.event.inputs.feature_name }}
-          fi
+    - name: Ensure develop branch exists
+      run: |
+        if [ "$(git branch --list develop)" ]; then
+          echo "Develop branch exists."
+        else
+          echo "Develop branch does not exist, creating from main..."
+          git checkout main
+          git checkout -b develop
+        fi
 
-      - name: Finish Feature
-        if: github.event.inputs.action == 'finish_feature'
-        run: |
+    - name: Finish Feature
+      if: github.event.inputs.action == 'finish_feature'
+      run: |
+        git checkout develop
+        git merge --no-ff feature/${{ github.event.inputs.feature_name }}
+        git branch -d feature/${{ github.event.inputs.feature_name }}
+
+    - name: Test Feature
+      if: github.event.inputs.action == 'test_feature'
+      run: |
+        # Add your test steps here
+
+    - name: Check for existing feature branch
+      if: github.event.inputs.action == 'start_feature'
+      run: |
+        if [ "$(git branch --list feature/${{ github.event.inputs.feature_name }})" ]; then
+          echo "Feature branch already exists."
+          exit 1
+        else
+          echo "Creating feature branch..."
           git checkout develop
-          git merge --no-ff feature/${{ github.event.inputs.feature_name }}
-          git branch -d feature/${{ github.event.inputs.feature_name }}
-
+          git checkout -b feature/${{ github.event.inputs.feature_name }}
+        fi
