@@ -38,6 +38,7 @@ jobs:
           git flow feature finish ${{ github.event.inputs.feature_name }}
           git config --global user.name "${{ secrets.GIT_NAME }}"
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
+          git pull
           git push origin develop
           git push origin --delete feature/${{ github.event.inputs.feature_name }}
 
@@ -47,6 +48,7 @@ jobs:
           git flow feature start ${{ github.event.inputs.feature_name }}
           git config --global user.name "${{ secrets.GIT_NAME }}"
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
+          git pull
           git push -u origin feature/${{ github.event.inputs.feature_name }}
           
 #git push origin ${{ github.event.inputs.feature_name }}
