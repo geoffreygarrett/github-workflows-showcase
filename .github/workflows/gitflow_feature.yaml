@@ -54,7 +54,7 @@ jobs:
         with:
           token: ${{ secrets.github_token }}
           repository: ${{ github.repository }}
-          event-type: push to ${{ github.repository }}
+          event-type: ${{ github.event.inputs.action }} on ${{ github.repository }} by ${{ github.actor }}
           client-payload: >-
             {
             "event": "${{ github.event_name }}",
