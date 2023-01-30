@@ -3,20 +3,18 @@ name: Gitflow Develop
 on:
   workflow_dispatch:
     inputs:
-      action:
-        type: string
-        description: Choose the action to perform
-        options:
-        - start_feature
-        - unstable_release
-
       feature_name:
         type: string
         description: Enter the name of the feature branch
-
-      release_bump:
-        type: string
-        description: Choose the version bump type
+      action:
+        type: choice
+        description: Choose the action to perform
+        options:
+        - finish_feature
+        - test_feature
+      version_bump:
+        type: choice
+        description: Choose the version bump for unstable release
         options:
         - major
         - minor
@@ -27,17 +25,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Start Feature
-        if: github.event.inputs.action == 'start_feature'
+      - name: Run the selected action
+        if: ${{ github.event.inputs.action == 'finish_feature' }}
         run: |
-          git checkout -b feature/${{ github.event.inputs.feature_name }} develop
+          echo "Merging feature/${{ github.event.inputs.feature_name }} into develop branch"
 
-      - name: Unstable Release
-        if: github.event.inputs.action == 'unstable_release'
+      - name: Run the selected action
+        if: ${{ github.event.inputs.action == 'test_feature' }}
         run: |
-          git checkout -b rc develop
-          # Perform version bump based on input: major, minor, patch
-          # Create a release candidate
+          echo "Running tests on feature/${{ github.event.inputs.feature_name }} branch"
+
+      - name: Bump version for unstable release
+        if: ${{ github.event.inputs.action == 'test_feature' }}
+        run: |
+          echo "Bumping version for unstable release: ${{ github.event.inputs.version_bump }}"
+
+
