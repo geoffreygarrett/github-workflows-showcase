@@ -1,5 +1,6 @@
 import os
 import sys
+import json 
 
 # Get environment variables
 github_token = os.environ['GH_TOKEN']
