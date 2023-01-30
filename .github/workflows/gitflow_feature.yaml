@@ -52,6 +52,7 @@ jobs:
       - name: repository-dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
+          token: ${{ secrets.github_token }}
           repository: ${{ github.repository }}
           event-type: push to ${{ github.repository }}
           client-payload: >-
