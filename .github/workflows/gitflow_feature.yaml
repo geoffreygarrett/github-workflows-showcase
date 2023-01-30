@@ -7,8 +7,9 @@ on:
         type: choice
         description: Choose the action to perform
         options:
+        - start_feature
         - finish_feature
-        - test_feature
+        - delete_feature
 
       feature_name:
         type: string
