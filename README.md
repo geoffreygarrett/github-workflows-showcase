@@ -3,7 +3,7 @@
 GitFlow is a popular Git branching model used for software development. It defines a strict branching model designed around the project release.
 
 ## Develop Workflow
-The develop branch is where active development takes place. All feature branches are created from develop, and merged back into develop when complete. The Develop Workflow is initiated with the `start_feature` action, which creates a new feature branch. The feature branch is then tested and merged back into develop with the `finish_feature` action.
+The develop branch is where active development takes place. All feature branches (`feature/<name>`) are created from develop, and merged back into develop when complete. The Develop Workflow is initiated with the `start_feature` action, which creates a new feature branch. The feature branch is then tested and merged back into develop with the `finish_feature` action, contained in the "Feature Workflow".
 
 A dev_release (unstable) can also be created from develop with the `unstable_release` action. This will create a new branch named `dev_release`, which is used to finalize and test a release before merging back into develop and main. The version bump, whether it be a major, minor or patch update, should be specified during the `unstable_release` action.
 
