@@ -1,0 +1,21 @@
+name: Webservices 🌐
+on: repository_dispatch
+
+jobs:
+  webservices:
+    runs-on: ubuntu-latest
+    name: webservices
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set environment variables
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+
+      - name: Run main.py
+        run: python main.py
