@@ -1,30 +1,36 @@
-name: CI
+name: GitFlow Workflow
 
 on:
-  workflow_dispatch:
+  repository_dispatch:
     inputs:
-      environment:
-        type: environment
-        description: Select the environment
-      boolean:
-        type: boolean
-        description: True or False
-      choice:
+      action:
         type: choice
-        description: Make a choice
+        description: "Choose GitFlow Action"
         options:
-        - foo
-        - bar
-        - baz
+        - start_feature
+        - finish_feature
+        - create_release_candidate
+        - finalize_release
+        - start_hotfix
+        - finish_hotfix
+      branch_name:
+        type: string
+        description: "Enter the branch name"
+      version:
+        type: string
+        description: "Enter the version (for release branches only)"
+
 jobs:
-  build:
+  gitflow:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: greet
-        run: | 
-          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
-          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
-          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      - name: GitFlow Action
+        run: |
+          echo "Action: ${{ inputs.action }}"
+          echo "Branch Name: ${{ inputs.branch_name }}"
+          if [ "${{ inputs.action }}" == "create_release_candidate" ] || [ "${{ inputs.action }}" == "finalize_release" ]; then
+            echo "Version: ${{ inputs.version }}"
+          fi
