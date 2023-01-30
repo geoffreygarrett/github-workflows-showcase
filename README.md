@@ -21,8 +21,9 @@ It is important to note that changes should never be directly made to the main b
 ## This Repository 
 This GitHub repository has been set up with actions to automate the GitFlow workflow process, making it easier to follow the branching model. The individual workflows are defined in the following files:
 
-gitflow_develop.yaml
-gitflow_feature.yaml
-gitflow_release.yaml
-gitflow_hotfix.yaml
+- `gitflow_develop.yaml`
+- `gitflow_feature.yaml`
+- `gitflow_release.yaml`
+- `gitflow_hotfix.yaml`
+
 To use the GitFlow workflows, simply navigate to the Actions tab in the repository, and choose the appropriate workflow based on the branch you are working on.
