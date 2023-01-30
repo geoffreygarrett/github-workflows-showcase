@@ -23,6 +23,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Ensure Feature Branch Doesn't Already Exist
+        if: github.event.inputs.action == 'start_feature'
+        run: |
+          if git rev-parse --verify feature/${{ github.event.inputs.feature_name }} >/dev/null 2>&1; then
+            echo "Feature branch already exists!"
+            exit 1
+          else
+            echo "Feature branch does not exist, creating now..."
+            git checkout develop
+            git pull
+            git checkout -b feature/${{ github.event.inputs.feature_name }}
+          fi
+
       - name: Finish Feature
         if: github.event.inputs.action == 'finish_feature'
         run: |
@@ -30,7 +43,3 @@ jobs:
           git merge --no-ff feature/${{ github.event.inputs.feature_name }}
           git branch -d feature/${{ github.event.inputs.feature_name }}
 
-      - name: Test Feature
-        if: github.event.inputs.action == 'test_feature'
-        run: |
-          # Add your test steps here
