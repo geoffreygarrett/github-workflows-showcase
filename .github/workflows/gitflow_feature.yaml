@@ -30,6 +30,11 @@ jobs:
       - name: Initialize Git-Flow
         run: |
           git flow init -d
+        
+      - name: Configure user
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions@github.com
           
       - name: Finish Feature
         if: github.event.inputs.action == 'finish_feature'
