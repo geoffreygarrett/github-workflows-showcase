@@ -1,4 +1,4 @@
-name: gitflow_develop
+name: Gitflow Develop
 
 on:
   workflow_dispatch:
@@ -11,17 +11,17 @@ on:
         - unstable_release
       feature_name:
         type: string
-        description: Enter the name of the feature branch (only applicable for start_feature)
+        description: "[start_feature] Enter the name of the feature branch"
       bump:
         type: choice
-        description: Choose the type of bump for unstable release (only applicable for unstable_release)
+        description: "[unstable_release] Choose bump type (major, minor, patch)"
         options:
         - major
         - minor
         - patch
 
 jobs:
-  develop:
+  develop_actions:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +36,5 @@ jobs:
           else
             echo "Invalid option chosen"
           fi
+
+
