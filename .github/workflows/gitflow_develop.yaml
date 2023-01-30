@@ -1,20 +1,20 @@
-name: Gitflow Develop
+name: gitflow_develop
 
 on:
   workflow_dispatch:
     inputs:
-      feature_name:
-        type: string
-        description: Enter the name of the feature branch
       action:
         type: choice
         description: Choose the action to perform
         options:
-        - finish_feature
-        - test_feature
-      version_bump:
+        - start_feature
+        - unstable_release
+      feature_name:
+        type: string
+        description: Enter the name of the feature branch (only applicable for start_feature)
+      bump:
         type: choice
-        description: Choose the version bump for unstable release
+        description: Choose the type of bump for unstable release (only applicable for unstable_release)
         options:
         - major
         - minor
@@ -27,19 +27,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run the selected action
-        if: ${{ github.event.inputs.action == 'finish_feature' }}
+      - name: perform action
         run: |
-          echo "Merging feature/${{ github.event.inputs.feature_name }} into develop branch"
-
-      - name: Run the selected action
-        if: ${{ github.event.inputs.action == 'test_feature' }}
-        run: |
-          echo "Running tests on feature/${{ github.event.inputs.feature_name }} branch"
-
-      - name: Bump version for unstable release
-        if: ${{ github.event.inputs.action == 'test_feature' }}
-        run: |
-          echo "Bumping version for unstable release: ${{ github.event.inputs.version_bump }}"
-
-
+          if [ "${{ inputs.action }}" == "start_feature" ]; then
+            echo "Starting feature branch with name ${{ inputs.feature_name }}"
+          elif [ "${{ inputs.action }}" == "unstable_release" ]; then
+            echo "Starting unstable release with bump type ${{ inputs.bump }}"
+          else
+            echo "Invalid option chosen"
+          fi
