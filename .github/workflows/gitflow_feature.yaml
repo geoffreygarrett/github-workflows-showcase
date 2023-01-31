@@ -58,6 +58,7 @@ jobs:
           client-payload: >-
             {
             "event": "${{ github.event_name }}",
+            "feature_name": "${{ github.event.inputs.feature_name }}",
             "actor": "${{ github.actor }}",
             "repository": "${{ github.repository }}",
             "ref": "${{ github.ref }}",
