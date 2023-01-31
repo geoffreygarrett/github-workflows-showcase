@@ -53,15 +53,15 @@ def main():
         
     # Handle actions based on the payload
     if payload['action'] == 'start_feature':
-      feature_name = payload['feature_name']
+      feature_name = payload['client_payload']['feature_name']
       git_flow_init()
       start_feature(feature_name)
     elif payload['action'] == 'finish_feature':
-      feature_name = payload['feature_name']
+      feature_name = payload['client_payload']['feature_name']
       git_flow_init()
       finish_feature(feature_name)
     elif payload['action'] == 'delete_feature':
-      feature_name = payload['feature_name']
+      feature_name = payload['client_payload']['feature_name']
       git_flow_init()
       delete_feature(feature_name)
 
