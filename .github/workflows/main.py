@@ -10,6 +10,13 @@ github_repository = os.environ['GITHUB_REPOSITORY']
 github_event_path = os.environ['GITHUB_EVENT_PATH']
 github_event_name = os.environ['GITHUB_EVENT_NAME']
 
+# print environment variables
+print(f"GITHUB_WORKSPACE: {github_workspace}")
+print(f"GITHUB_REPOSITORY: {github_repository}")
+print(f"GITHUB_EVENT_PATH: {github_event_path}")
+print(f"GITHUB_EVENT_NAME: {github_event_name}")
+
+
 def run_command(command):
     # Function to run shell commands
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
