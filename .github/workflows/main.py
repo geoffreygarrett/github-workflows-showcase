@@ -42,10 +42,8 @@ def main():
     # Read in payload
     with open(github_event_path, 'r') as f:
       payload = json.load(f)
-    
-    if payload['debug'] == 'true':
-        print(payload)
-
+      print(json.dumps(payload, indent=4, sort_keys=True))
+        
     # Handle actions based on the payload
     if payload['action'] == 'start_feature':
       feature_name = payload['feature_name']
