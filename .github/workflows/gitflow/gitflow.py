@@ -8,6 +8,7 @@ from enum import Enum
 # - https://medium.com/itrevolution/five-minute-devops-gitflow-best-practices-a6cd1265de24
 # - https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Gitflow-release-branch-process-start-finish
 # - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+# - https://git.logikum.hu/flow/
 
 from . import logger
 import subprocess

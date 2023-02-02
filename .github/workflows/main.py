@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure_user)
+from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -33,7 +33,15 @@ def main():
         inputs = payload['client_payload']['inputs']
 
         # Configure git
-        git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
+        git_configure(key='user.name', value='github-actions[bot]')
+        git_configure(key='user.email', value='github-actions@github.com')
+        git_configure(key='gitflow.branch.master', value='main')
+        git_configure(key='gitflow.branch.develop', value='develop')
+        git_configure(key='gitflow.prefix.feature', value='feature/')
+        git_configure(key='gitflow.prefix.release', value='release/')
+        git_configure(key='gitflow.prefix.hotfix', value='hotfix/')
+        git_configure(key='gitflow.prefix.support', value='support/')
+        git_configure(key='gitflow.prefix.versiontag', value='v')
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
