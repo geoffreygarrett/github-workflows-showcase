@@ -298,3 +298,17 @@ def finish_release_branch(release_name):
             raise ReleaseBranchMergeError(message)
         else:
             raise error
+    # push tags
+    try:
+        _ = subprocess.run(
+            ["git", "push", "origin", "--tags"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error pushing tags")
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        raise error
