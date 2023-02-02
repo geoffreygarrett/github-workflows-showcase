@@ -18,6 +18,10 @@ class CommandExecutionError(Exception):
     pass
 
 
+class GitPushError(Exception):
+    pass
+
+
 def configure_user():
     # Configure user
     try:
@@ -47,8 +51,13 @@ def start_feature(feature_name, github_repository):
     # Start a new feature in GitFlow
     try:
         run_command(f"git flow feature start {feature_name}")
-        run_command(f"git push --set-upstream origin feature/{feature_name}")
+
+        stdout, stderr = run_command(f"git push --set-upstream origin feature/{feature_name}")
+        if stderr:
+            raise GitPushError(f"Error while pushing feature '{feature_name}' to remote: {stderr.decode()}")
+
         logger.info(f"Feature '{feature_name}' started successfully in repository '{github_repository}'.")
+
     except Exception as error:
         logger.error(
             f"An error occurred while starting the feature '{feature_name}' in repository '{github_repository}': {error}")
@@ -59,7 +68,10 @@ def finish_feature(feature_name, github_repository):
     try:
         run_command(f"git branch feature/{feature_name}")
         run_command(f"git flow feature finish {feature_name}")
-        run_command("git push")
+        stdout, stderr = run_command(f"git push --set-upstream origin develop")
+        if stderr:
+            raise GitPushError(f"Error while pushing '{feature_name}' to remote: {stderr.decode()}")
+
         logger.info(f"Feature '{feature_name}' finished successfully in repository '{github_repository}'.")
 
     except Exception as error:
