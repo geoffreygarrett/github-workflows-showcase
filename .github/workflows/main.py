@@ -56,13 +56,13 @@ def main():
         if payload['action'] == "start_feature":
 
             # Start feature
-            start_feature(payload['client_payload']['feature_name'], **options)
+            start_feature(inputs['feature_name'], **options)
 
         # Handle finish_feature event
         elif payload['action'] == "finish_feature":
 
             # Finish feature
-            finish_feature(payload['client_payload']['feature_name'], **options)
+            finish_feature(inputs['feature_name'], **options)
 
         # # Handle delete_feature event
         # elif payload['action'] == "delete_feature":
@@ -74,13 +74,13 @@ def main():
         elif payload['action'] == "start_release":
 
             # Start release
-            start_release(payload['client_payload']['release_name'], github_repository)
+            start_release(inputs['release_name'], github_repository)
 
         # Handle finish_release
         elif payload['action'] == "finish_release":
 
             # Finish release
-            finish_release(payload['client_payload']['release_name'], github_repository)
+            finish_release(inputs['release_name'], github_repository)
 
 
 if __name__ == "__main__":
