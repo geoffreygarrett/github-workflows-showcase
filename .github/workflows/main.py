@@ -38,12 +38,12 @@ def main():
         # Read in payload
         with open(github_event_path, 'r') as f:
             payload = json.load(f)
-
-        reconcile_method = payload['reconcile_divergence']
+            # pretty print
+            print(json.dumps(payload, indent=4, sort_keys=True))
 
         # Configure git
         git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
-        git_configure_reconcile_divergent_branches(reconcile_method, **options)
+        git_configure_reconcile_divergent_branches(payload['reconcile_divergence'], **options)
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
