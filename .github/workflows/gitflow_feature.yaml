@@ -14,6 +14,26 @@ on:
       feature_name:
         type: string
         description: Enter the name of the feature branch
+        
+      upstream_scope:
+        type: integer
+        description: Enter the upstream scope of the release
+        default: 0
+
+      downstream_scope:
+        type: integer
+        description: Enter the downstream scope of the release
+        default: 0
+
+      reconcile_divergence:
+        type: choice
+        description: "[DANGER] How to reconcile diverged branches"
+        default: 'abort'
+        options:
+        - abort
+        - merge
+        - rebase
+        - fast-forward
 
 jobs:
   feature:
@@ -23,32 +43,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Git-Flow
-        run: |
-          sudo apt-get install git-flow
+      - name: repository-dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.github_token }}
+          repository: ${{ github.repository }}
+          event-type: ${{ github.event.inputs.action }}
+          client-payload: >-
+            {
+              "event": "${{ github.event_name }}",
+              "actor": "${{ github.actor }}",
+              "repository": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "ref_name": "${{ github.ref_name }}",
+              "ref_type": "${{ github.ref_type }}",
+              "sha": "${{ github.sha }}",
+              "workflow": "${{ github.workflow }}",
+              "inputs": {
+                "action": "${{ github.event.inputs.action }}",
+                "feature_name": "${{ github.event.inputs.feature_name }}",
+                "feature_branch": "feature/${{ github.event.inputs.feature_name }}",
+                "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
+                "downstream_scope": "${{ github.event.inputs.downstream_scope }}",
+                "reconcile_divergence": "${{ github.event.inputs.reconcile_divergence }}"
+              }
+            }
 
-      - name: Initialize Git-Flow
-        run: |
-          git flow init -d
-          
-      - name: Finish Feature
-        if: github.event.inputs.action == 'finish_feature'
-        run: |
-          git branch feature/${{ github.event.inputs.feature_name }}
-          git flow feature finish ${{ github.event.inputs.feature_name }}
-          git config --global user.name "${{ secrets.GIT_NAME }}"
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
-          git commit -m "feat(${{ github.event.inputs.feature_name }}): Finished and merged to `develop`"
-          git push origin develop
-          git push origin --delete feature/${{ github.event.inputs.feature_name }}
-
-      - name: Start Feature
-        if: github.event.inputs.action == 'start_feature'
-        run: |
-          git flow feature start ${{ github.event.inputs.feature_name }}
-          git config --global user.name "${{ secrets.GIT_NAME }}"
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
-          git commit -m "feat(${{ github.event.inputs.feature_name }}): Created from `develop`"
-          git push -u origin feature/${{ github.event.inputs.feature_name }}
-          
-#git push origin ${{ github.event.inputs.feature_name }}

@@ -9,7 +9,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set environment variables
+      - name: Install Git-Flow
+        run: |
+          sudo apt-get install git-flow
+
+      - name: Run `main.py` script
         run: python .github/workflows/main.py
         env:
           GH_TOKEN: ${{ secrets.github_token }}
