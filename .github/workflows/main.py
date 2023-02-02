@@ -2,11 +2,8 @@ import os
 import json
 import logging
 
-import requests
-from .actions.dispatch import trigger_repository_dispatch
-from .actions.run import run_command
-from .actions.gitflow import (git_flow_init, start_feature, finish_feature, delete_feature,
-                              start_release, finish_release)
+from gitflow.gitflow import (git_flow_init, start_feature, finish_feature, delete_feature,
+                             start_release, finish_release)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
