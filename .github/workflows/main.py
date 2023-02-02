@@ -39,14 +39,14 @@ def main():
         os.chdir(github_workspace)
 
         # Handle start_feature event
-        if inputs['action'] == "start_feature":
+        if payload['action'] == "start_feature":
 
             # Start feature
             git_flow_init()
             start_feature_branch(inputs['feature_name'])
 
         # Handle finish_feature event
-        elif inputs['action'] == "finish_feature":
+        elif payload['action'] == "finish_feature":
 
             # Finish feature
             git_flow_init()
