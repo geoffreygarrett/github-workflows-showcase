@@ -229,13 +229,13 @@ def start_release_branch(release_name):
     # push
     try:
         _ = subprocess.run(
-            ["git", "push", "--set-upstream", "origin", "release/%s" % release_name],
+            ["git", "flow", "release", "publish", release_name],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             check=True
         )
     except subprocess.CalledProcessError as error:
-        logger.error("Error pushing release branch %s", release_name)
+        logger.error("Error publishing release branch %s", release_name)
         logger.error("Return code: %d", error.returncode)
         logger.error("Stdout:\n%s", error.stdout.decode().strip())
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
