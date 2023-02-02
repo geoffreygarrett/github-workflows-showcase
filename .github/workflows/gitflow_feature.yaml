@@ -1,4 +1,4 @@
-name: Gitflow Feature
+name: Gitflow Feature 💡
 
 on:
   workflow_dispatch:

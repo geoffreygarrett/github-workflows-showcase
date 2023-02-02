@@ -1,4 +1,4 @@
-name: Gitflow Develop
+name: Gitflow Develop 🛠️
 
 on:
   workflow_dispatch:

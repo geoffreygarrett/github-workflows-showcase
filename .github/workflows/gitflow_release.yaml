@@ -24,7 +24,7 @@
 #
 #git flow release finish '0.1.0'
 # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Gitflow-release-branch-process-start-finish
-name: Gitflow Release
+name: Gitflow Release 🎁
 
 on:
   workflow_dispatch:
@@ -81,7 +81,7 @@ jobs:
               "sha": "${{ github.sha }}",
               "workflow": "${{ github.workflow }}",
               "inputs": {
-                "release_name": "${{ github.event.inputs.release_version }}",
+                "release_name": "${{ github.event.inputs.release_name }}",
                 "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
                 "downstream_scope": "${{ github.event.inputs.downstream_scope }}"
                 
