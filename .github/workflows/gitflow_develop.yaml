@@ -7,7 +7,6 @@ on:
         type: choice
         description: Choose the action to perform
         options:
-        - start_feature
         - unstable_release
       feature_name:
         type: string
@@ -21,20 +20,30 @@ on:
         - patch
 
 jobs:
-  develop_actions:
+  feature:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: perform action
-        run: |
-          if [ "${{ inputs.action }}" == "start_feature" ]; then
-            echo "Starting feature branch with name ${{ inputs.feature_name }}"
-          elif [ "${{ inputs.action }}" == "unstable_release" ]; then
-            echo "Starting unstable release with bump type ${{ inputs.bump }}"
-          else
-            echo "Invalid option chosen"
-          fi
-
-
+      - name: repository-dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.github_token }}
+          repository: ${{ github.repository }}
+          event-type: ${{ github.event.inputs.action }}
+          client-payload: >-
+            {
+            "event": "${{ github.event_name }}",
+            "actor": "${{ github.actor }}",
+            "repository": "${{ github.repository }}",
+            "ref": "${{ github.ref }}",
+            "ref_name": "${{ github.ref_name }}",
+            "ref_type": "${{ github.ref_type }}",
+            "sha": "${{ github.sha }}",
+            "workflow": "${{ github.workflow }}",
+            "inputs": {
+              "action": "${{ github.event.inputs.action }}",
+              "bump": "${{ github.event.inputs.bump }}"
+            }

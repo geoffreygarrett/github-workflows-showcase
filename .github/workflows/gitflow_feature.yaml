@@ -23,38 +23,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Git-Flow
-        run: |
-          sudo apt-get install git-flow
-
-      - name: Initialize Git-Flow
-        run: |
-          git flow init -d
-        
-      - name: Configure user
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions@github.com
-          
-      - name: Finish Feature
-        if: github.event.inputs.action == 'finish_feature'
-        run: |
-          git branch feature/${{ github.event.inputs.feature_name }}
-          git flow feature finish ${{ github.event.inputs.feature_name }}
-          git push origin --delete feature/${{ github.event.inputs.feature_name }}
-
-      - name: Start Feature
-        if: github.event.inputs.action == 'start_feature'
-        run: |
-          git flow feature start ${{ github.event.inputs.feature_name }}
-          git push -u origin feature/${{ github.event.inputs.feature_name }}
-          
       - name: repository-dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.github_token }}
           repository: ${{ github.repository }}
-          event-type: ${{ github.event.inputs.action }} on ${{ github.repository }} by ${{ github.actor }}
+          event-type: ${{ github.event.inputs.action }}
           client-payload: >-
             {
             "event": "${{ github.event_name }}",
@@ -63,5 +37,10 @@ jobs:
             "ref": "${{ github.ref }}",
             "ref_name": "${{ github.ref_name }}",
             "ref_type": "${{ github.ref_type }}",
-            "sha": "${{ github.sha }}"
+            "sha": "${{ github.sha }}",
+            "workflow": "${{ github.workflow }}",
+            "inputs": {
+              "action": "${{ github.event.inputs.action }}",
+              "feature_name": "${{ github.event.inputs.feature_name }}",
+              "feature_branch": "feature/${{ github.event.inputs.feature_name }}"
             }

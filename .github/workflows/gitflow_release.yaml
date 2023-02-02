@@ -1,0 +1,68 @@
+# Once develop has acquired enough features for a release (or a predetermined release date is approaching), you fork a release branch off of develop. Creating this branch starts the next release cycle, so no new features can be added after this point—only bug fixes, documentation generation, and other release-oriented tasks should go in this branch. Once it's ready to ship, the release branch gets merged into main and tagged with a version number. In addition, it should be merged back into develop, which may have progressed since the release was initiated.
+#
+#Using a dedicated branch to prepare releases makes it possible for one team to polish the current release while another team continues working on features for the next release. It also creates well-defined phases of development (e.g., it's easy to say, “This week we're preparing for version 4.0,” and to actually see it in the structure of the repository).
+#
+#Making release branches is another straightforward branching operation. Like feature branches, release branches are based on the develop branch. A new release branch can be created using the following methods.
+#
+#Without the git-flow extensions:
+#
+#git checkout develop
+#git checkout -b release/0.1.0
+#When using the git-flow extensions:
+#
+#$ git flow release start 0.1.0
+#Switched to a new branch 'release/0.1.0'
+#Once the release is ready to ship, it will get merged it into main and develop, then the release branch will be deleted. It’s important to merge back into develop because critical updates may have been added to the release branch and they need to be accessible to new features. If your organization stresses code review, this would be an ideal place for a pull request.
+#
+#To finish a release branch, use the following methods:
+#
+#Without the git-flow extensions:
+#
+#git checkout main
+#git merge release/0.1.0
+#Or with the git-flow extension:
+#
+#git flow release finish '0.1.0'
+# https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Gitflow-release-branch-process-start-finish
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: Choose the action to perform
+        options:
+          - start_release
+          - finish_release
+          - delete_release
+
+jobs:
+  feature:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: repository-dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.github_token }}
+          repository: ${{ github.repository }}
+          event-type: ${{ github.event.inputs.action }}
+          client-payload: >-
+            {
+            "event": "${{ github.event_name }}",
+            "repository": "${{ github.repository }}",
+            "actor": "${{ github.actor }}",
+            "ref": "${{ github.ref }}",
+            "sha": "${{ github.sha }}",
+            "workflow": "${{ github.workflow }}",
+            "inputs": {
+              "action": "${{ github.event.inputs.action }}",
+              "release_name": "${{ github.event.inputs.release_name }}",
+              "release_tag": "${{ github.event.inputs.release_tag }}",
+              "release_branch": "${{ github.event.inputs.release_branch }}",
+              "release_message": "${{ github.event.inputs.release_message }}"
+            }
+            }
