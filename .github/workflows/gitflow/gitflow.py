@@ -9,6 +9,7 @@ from enum import Enum
 # - https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Gitflow-release-branch-process-start-finish
 # - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 # - https://git.logikum.hu/flow/
+# - https://nvie.com/posts/a-successful-git-branching-model/
 
 from . import logger
 import subprocess
@@ -195,3 +196,34 @@ def finish_feature_branch(feature_name):
             raise FeatureBranchMergeError(message)
         else:
             raise error
+
+
+def start_release_branch(release_name):
+    try:
+        _ = subprocess.run(
+            ["git", "flow", "release", "start", release_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error starting release branch %s", release_name)
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        raise error
+
+    # push
+    try:
+        _ = subprocess.run(
+            ["git", "push", "--set-upstream", "origin", "release/%s" % release_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error pushing release branch %s", release_name)
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        raise error

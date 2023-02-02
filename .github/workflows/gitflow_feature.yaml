@@ -9,7 +9,7 @@ on:
         options:
         - start_feature
         - finish_feature
-        - delete_feature
+#        - delete_feature
 
       feature_name:
         type: string
@@ -25,15 +25,15 @@ on:
         description: Enter the downstream scope of the release
         default: 0
 
-      reconcile_divergence:
-        type: choice
-        description: "[DANGER] How to reconcile diverged branches"
-        default: 'abort'
-        options:
-        - abort
-        - merge
-        - rebase
-        - fast-forward
+#      reconcile_divergence:
+#        type: choice
+#        description: "[DANGER] How to reconcile diverged branches"
+#        default: 'abort'
+#        options:
+#        - abort
+#        - merge
+#        - rebase
+#        - fast-forward
 
 jobs:
   feature:

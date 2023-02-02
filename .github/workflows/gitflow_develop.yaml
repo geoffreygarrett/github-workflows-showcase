@@ -35,15 +35,20 @@ jobs:
           event-type: ${{ github.event.inputs.action }}
           client-payload: >-
             {
-            "event": "${{ github.event_name }}",
-            "actor": "${{ github.actor }}",
-            "repository": "${{ github.repository }}",
-            "ref": "${{ github.ref }}",
-            "ref_name": "${{ github.ref_name }}",
-            "ref_type": "${{ github.ref_type }}",
-            "sha": "${{ github.sha }}",
-            "workflow": "${{ github.workflow }}",
-            "inputs": {
-              "action": "${{ github.event.inputs.action }}",
-              "bump": "${{ github.event.inputs.bump }}"
+              "event": "${{ github.event_name }}",
+              "actor": "${{ github.actor }}",
+              "repository": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "ref_name": "${{ github.ref_name }}",
+              "ref_type": "${{ github.ref_type }}",
+              "sha": "${{ github.sha }}",
+              "workflow": "${{ github.workflow }}",
+              "inputs": {
+                "action": "${{ github.event.inputs.action }}",
+                "feature_name": "${{ github.event.inputs.feature_name }}",
+                "feature_branch": "feature/${{ github.event.inputs.feature_name }}",
+                "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
+                "downstream_scope": "${{ github.event.inputs.downstream_scope }}",
+                "reconcile_divergence": "${{ github.event.inputs.reconcile_divergence }}"
+              }
             }

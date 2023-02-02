@@ -58,6 +58,12 @@ def main():
             git_flow_init()
             finish_feature_branch(inputs['feature_name'])
 
+        # Handle start_release event
+        elif payload['action'] == "start_release":
+            logger.info(f"Creating release branch release/{inputs['release_name']} from develop")
+            git_flow_init()
+            start_release_branch(inputs['release_name'])
+
 
 if __name__ == "__main__":
     main()

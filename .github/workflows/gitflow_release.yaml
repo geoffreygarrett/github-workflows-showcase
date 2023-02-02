@@ -35,9 +35,9 @@ on:
         options:
           - start_release
           - finish_release
-          - delete_release
+#          - delete_release
 
-      release_name:
+      release_version:
         type: string
         description: Enter the name of the release branch
 
@@ -67,17 +67,19 @@ jobs:
           event-type: ${{ github.event.inputs.action }}
           client-payload: >-
             {
-            "event": "${{ github.event_name }}",
-            "repository": "${{ github.repository }}",
-            "actor": "${{ github.actor }}",
-            "ref": "${{ github.ref }}",
-            "sha": "${{ github.sha }}",
-            "workflow": "${{ github.workflow }}",
+              "event": "${{ github.event_name }}",
+              "actor": "${{ github.actor }}",
+              "repository": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "ref_name": "${{ github.ref_name }}",
+              "ref_type": "${{ github.ref_type }}",
+              "sha": "${{ github.sha }}",
+              "workflow": "${{ github.workflow }}",
               "inputs": {
-                "action": "${{ github.event.inputs.action }}",
-                "release_name": "${{ github.event.inputs.release_name }}",
-                "release_tag": "${{ github.event.inputs.release_tag }}",
-                "release_branch": "${{ github.event.inputs.release_branch }}",
-                "release_message": "${{ github.event.inputs.release_message }}"
+                "release_version": "${{ github.event.inputs.release_version }}",
+                "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
+                "downstream_scope": "${{ github.event.inputs.downstream_scope }}"
+                
               }
             }
+

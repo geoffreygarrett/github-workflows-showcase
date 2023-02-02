@@ -11,7 +11,11 @@ jobs:
 
       - name: Install Git-Flow
         run: |
-          sudo apt-get install git-flow
+          sudo apt-get install git-flow=1.12.3-3
+
+#      - name: Install Reverse-Proxy
+#        run: |
+#          sudo pip install re-ver==0.3.3
 
       - name: Run `main.py` script
         run: python .github/workflows/main.py
