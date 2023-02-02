@@ -2,7 +2,9 @@ import json
 import logging
 import os
 
-from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure)
+from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure,
+                             start_release_branch,
+                             finish_release_branch)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -71,6 +73,12 @@ def main():
             logger.info(f"Creating release branch release/{inputs['release_name']} from develop")
             git_flow_init()
             start_release_branch(inputs['release_name'])
+
+        # Handle finish_release event
+        elif payload['action'] == "finish_release":
+            logger.info(f"Merging release/{inputs['release_name']} into develop and main, then deleting release")
+            git_flow_init()
+            finish_release_branch(inputs['release_name'])
 
 
 if __name__ == "__main__":
