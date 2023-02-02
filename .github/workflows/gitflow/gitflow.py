@@ -6,6 +6,7 @@
 # - https://git.logikum.hu/flow/
 # - https://nvie.com/posts/a-successful-git-branching-model/
 # - https://medium.com/android-news/gitflow-with-github-c675aa4f606a
+# - https://git.logikum.hu/graph/feature
 
 import subprocess
 
@@ -50,7 +51,7 @@ class GitFlowInitError(RunCommandError):
 def git_flow_init():
     logger.info("Initializing git flow")
     try:
-        result = subprocess.run(
+        _ = subprocess.run(
             ["git", "flow", "init", "-d"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

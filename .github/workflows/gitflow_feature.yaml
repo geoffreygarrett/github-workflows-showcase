@@ -1,4 +1,5 @@
 name: Gitflow Feature 💡
+# TODO: Incorporate all options here https://git.logikum.hu/flow/feature
 
 on:
   workflow_dispatch:
