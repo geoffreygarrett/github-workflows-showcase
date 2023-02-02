@@ -198,7 +198,7 @@ def finish_feature(feature_name, **kwargs):
         if log_command:
             logger.error(f"Error occurred while checking feature '{feature_name}': {stderr}")
         if raise_error:
-            raise GitFlowFeatureFinishError(f"Error occurred while checking feature '{feature_name}': {stderr}")
+            raise GitFlowFeatureFinishError(f"Error occurred while checking feature '{feature_name}': {stdout}")
 
     command = f"git flow feature finish {feature_name}"  # <-------------
     stdout, stderr, return_code = run_command(command)
@@ -207,7 +207,7 @@ def finish_feature(feature_name, **kwargs):
         if log_command:
             logger.error(f"Error occurred while finishing feature '{feature_name}': {stderr}")
         if raise_error:
-            raise GitFlowFeatureFinishError(f"Error occurred while finishing feature '{feature_name}': {stderr}")
+            raise GitFlowFeatureFinishError(f"Error occurred while finishing feature '{feature_name}': {stdout}")
 
     command = f"git push origin"  # <------------------------------------
     stdout, stderr, return_code = run_command(command)
@@ -216,7 +216,7 @@ def finish_feature(feature_name, **kwargs):
         if log_command:
             logger.error(f"Error occurred while pushing develop branch: {stderr}")
         if raise_error:
-            raise GitFlowFeatureFinishError(f"Error occurred while pushing develop branch: {stderr}")
+            raise GitFlowFeatureFinishError(f"Error occurred while pushing develop branch: {stdout}")
 
 #
 # class GitFlowDeleteFeatureError(UnknownException):
