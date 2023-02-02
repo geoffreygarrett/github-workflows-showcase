@@ -73,11 +73,11 @@ jobs:
             "ref": "${{ github.ref }}",
             "sha": "${{ github.sha }}",
             "workflow": "${{ github.workflow }}",
-            "inputs": {
-              "action": "${{ github.event.inputs.action }}",
-              "release_name": "${{ github.event.inputs.release_name }}",
-              "release_tag": "${{ github.event.inputs.release_tag }}",
-              "release_branch": "${{ github.event.inputs.release_branch }}",
-              "release_message": "${{ github.event.inputs.release_message }}"
-            }
+              "inputs": {
+                "action": "${{ github.event.inputs.action }}",
+                "release_name": "${{ github.event.inputs.release_name }}",
+                "release_tag": "${{ github.event.inputs.release_tag }}",
+                "release_branch": "${{ github.event.inputs.release_branch }}",
+                "release_message": "${{ github.event.inputs.release_message }}"
+              }
             }

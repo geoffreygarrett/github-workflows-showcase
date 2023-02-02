@@ -50,8 +50,9 @@ jobs:
             "ref_type": "${{ github.ref_type }}",
             "sha": "${{ github.sha }}",
             "workflow": "${{ github.workflow }}",
-            "inputs": {
-              "action": "${{ github.event.inputs.action }}",
-              "feature_name": "${{ github.event.inputs.feature_name }}",
-              "feature_branch": "feature/${{ github.event.inputs.feature_name }}"
+              "inputs": {
+                "action": "${{ github.event.inputs.action }}",
+                "feature_name": "${{ github.event.inputs.feature_name }}",
+                "feature_branch": "feature/${{ github.event.inputs.feature_name }}"
+              }
             }
