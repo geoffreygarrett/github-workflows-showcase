@@ -1,15 +1,13 @@
 from .run import run_command
 import os
-import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 import logging
 from .run import run_command
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+# get logger from .__init__.py
+
+
+from . import logger
 
 
 class GitError(Exception):
@@ -39,6 +37,16 @@ class GitFlowInitError(GitError):
 
 class GitFeatureError(GitError):
     """Base error for Git feature operations"""
+    pass
+
+
+class GitFlowFeatureStartError(GitFeatureError):
+    """Error for starting a feature"""
+    pass
+
+
+class GitFlowFeatureFinishError(GitFeatureError):
+    """Error for finishing a feature"""
     pass
 
 
@@ -82,79 +90,74 @@ class GitReleasePullError(GitReleaseError):
     pass
 
 
-def configure_user():
+def configure_user(raise_error=False, log_error=True):
     """Configure user for Git operations"""
     try:
         stdout1, stderr1 = run_command("git config user.name github-actions[bot]")
         stdout2, stderr2 = run_command("git config user.email github-actions@github.com")
         if stderr1 or stderr2:
-            raise GitConfigError(f"Error while configuring user: {stderr1.decode()}{stderr2.decode()}")
+            error_msg = f"Error while configuring user: {stderr1.decode()}{stderr2.decode()}"
+            if log_error:
+                logger.error(error_msg)
+            if raise_error:
+                raise GitConfigError(error_msg)
+        else:
+            logger.info("User configured successfully.")
 
-        logger.info(f"User configured successfully.")
     except Exception as error:
-        logger.error(f"An error occurred while configuring user: {error}")
+        error_msg = f"An error occurred while configuring user: {error}"
+        if log_error:
+            logger.error(error_msg)
+        if raise_error:
+            raise error
 
 
-def git_flow_init(github_repository):
-    """Initialize GitFlow on repository"""
+def git_flow_init(raise_error=False):
+    """Initialize Git Flow repository"""
     try:
-        run_command("git flow init -d")
-        logger.info(f"GitFlow initialized successfully for repository '{github_repository}'.")
+        stdout, stderr = run_command("git flow init -d")
+        if stderr:
+            error_message = f"Error while initializing Git Flow repository: {stderr.decode()}"
+            if raise_error:
+                raise GitFlowInitError(error_message)
+            else:
+                logger.error(error_message)
+        else:
+            logger.info(f"Git Flow repository initialized successfully.")
     except Exception as error:
-        logger.error(f"An error occurred while initializing GitFlow for repository '{github_repository}': {error}")
+        logger.error(f"An error occurred while initializing Git Flow repository: {error}")
 
 
-def start_feature(feature_name, github_repository):
-    """Start a new feature in GitFlow"""
+def start_feature(feature_name, raise_error=False):
+    """Start a new Git Flow feature"""
     try:
-        run_command(f"git flow feature start {feature_name}")
-
-        stdout, stderr = run_command(f"git push --set-upstream origin feature/{feature_name}")
+        stdout, stderr = run_command(f"git flow feature start {feature_name}")
         if stderr:
-            raise GitFeaturePushError(f"Error while pushing feature '{feature_name}' to remote: {stderr.decode()}")
-
-        logger.info(f"Feature '{feature_name}' started successfully in repository '{github_repository}'.")
+            error_message = f"Error while starting Git Flow feature '{feature_name}': {stderr.decode()}"
+            if raise_error:
+                raise GitFlowFeatureStartError(error_message)
+            else:
+                logger.error(error_message)
+        else:
+            logger.info(f"Git Flow feature '{feature_name}' started successfully.")
     except Exception as error:
-        logger.error(
-            f"An error occurred while starting the feature '{feature_name}' in repository '{github_repository}': {error}")
+        logger.error(f"An error occurred while starting Git Flow feature '{feature_name}': {error}")
 
 
-def finish_feature(feature_name, github_repository):
-    """
-    Finishes a feature in GitFlow
-
-    Args:
-    - feature_name (str): name of the feature to finish
-    - github_repository (str): name of the github repository
-
-    Raises:
-    - GitPullError: raised when there is an error while pulling from remote
-    - FeatureNotFoundError: raised when the feature is not found in the repository
-    - GitPushError: raised when there is an error while pushing to remote
-
-    Returns:
-    None
-    """
+def finish_feature(feature_name, raise_error=False):
+    """Finish an existing Git Flow feature"""
     try:
-        stdout, stderr = run_command(f"git pull")
+        stdout, stderr = run_command(f"git flow feature finish {feature_name}")
         if stderr:
-            raise GitPullError(f"Error while pulling '{feature_name}' from remote: {stderr.decode()}")
-
-        stdout, stderr = run_command(f"git branch feature/{feature_name}")
-        if stderr:
-            raise FeatureNotFoundError(
-                f"Feature '{feature_name}' not found in repository '{github_repository}': {stderr.decode()}")
-
-        run_command(f"git flow feature finish {feature_name}")
-        stdout, stderr = run_command(f"git push --set-upstream origin develop")
-        if stderr:
-            raise GitPushError(f"Error while pushing '{feature_name}' to remote: {stderr.decode()}")
-
-        logger.info(f"Feature '{feature_name}' finished successfully in repository '{github_repository}'.")
-
+            error_message = f"Error while finishing Git Flow feature '{feature_name}': {stderr.decode()}"
+            if raise_error:
+                raise GitFlowFeatureFinishError(error_message)
+            else:
+                logger.error(error_message)
+        else:
+            logger.info(f"Git Flow feature '{feature_name}' finished successfully.")
     except Exception as error:
-        logger.error(
-            f"An error occurred while finishing the feature '{feature_name}' in repository '{github_repository}': {error}")
+        logger.error(f"An error occurred while finishing Git Flow feature '{feature_name}': {error}")
 
 
 def delete_feature(feature_name, github_repository):
