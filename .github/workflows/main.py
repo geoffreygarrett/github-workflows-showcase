@@ -41,9 +41,12 @@ def main():
             # pretty print
             print(json.dumps(payload, indent=4, sort_keys=True))
 
+
+        inputs = payload['client_payload']['inputs']
+
         # Configure git
         git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
-        git_configure_reconcile_divergent_branches(payload['reconcile_divergence'], **options)
+        git_configure_reconcile_divergent_branches(inputs['reconcile_divergence'], **options)
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
