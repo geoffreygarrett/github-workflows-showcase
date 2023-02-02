@@ -3,7 +3,7 @@ import json
 import logging
 
 from gitflow.gitflow import (git_flow_init, start_feature, finish_feature, delete_feature,
-                             start_release, finish_release)
+                             start_release, finish_release, configure_user)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -30,6 +30,7 @@ def main():
             payload = json.load(f)
 
         # Initialize GitFlow
+        configure_user()  # github-actions[bot]
         git_flow_init(github_token, github_workspace, github_repository)
 
         # Handle start_feature event

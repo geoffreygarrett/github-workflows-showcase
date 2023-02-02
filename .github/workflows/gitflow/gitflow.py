@@ -14,6 +14,23 @@ class ReleaseNotFoundError(Exception):
     pass
 
 
+class CommandExecutionError(Exception):
+    pass
+
+
+def configure_user():
+    # Configure user
+    try:
+        stdout1, stderr1 = run_command("git config user.name github-actions[bot]")
+        stdout2, stderr2 = run_command("git config user.email github-actions@github.com")
+        if stderr1 or stderr2:
+            raise CommandExecutionError(f"Error while configuring user: {stderr1.decode()}{stderr2.decode()}")
+
+        logger.info(f"User configured successfully.")
+    except Exception as error:
+        logger.error(f"An error occurred while configuring user: {error}")
+
+
 def git_flow_init(github_token, github_workspace, github_repository):
     # Initialize GitFlow on repository
     try:
