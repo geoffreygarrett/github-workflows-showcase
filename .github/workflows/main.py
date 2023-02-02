@@ -3,7 +3,7 @@ import json
 import logging
 
 from gitflow.gitflow import (git_flow_init, start_feature, finish_feature,
-                             start_release, finish_release, git_configure_user, ReconcileDivergentBranches)
+                             start_release, finish_release, git_configure_user, git_configure_reconcile_divergent_branches)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,13 +22,16 @@ print(f"GITHUB_EVENT_PATH: {github_event_path}")
 print(f"GITHUB_EVENT_NAME: {github_event_name}")
 
 
+
+
 def main():
     RAISE_ERROR = True
 
     options = {
         "raise_error": RAISE_ERROR,
-        "reconcile_divergent_branches": ReconcileDivergentBranches.MERGE
     }
+
+
 
     # Handle repository dispatch events
     if github_event_name == "repository_dispatch":
@@ -36,8 +39,11 @@ def main():
         with open(github_event_path, 'r') as f:
             payload = json.load(f)
 
-        # Initialize GitFlow
+        reconcile_method = payload['client_payload']['reconcile_divergence']
+
+        # Configure git
         git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
+        git_configure_reconcile_divergent_branches(reconcile_method, **options)
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
