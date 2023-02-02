@@ -1,6 +1,6 @@
-import os
 import json
 import logging
+import os
 
 from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure)
 
@@ -20,6 +20,14 @@ print(f"GITHUB_REPOSITORY: {github_repository}")
 print(f"GITHUB_EVENT_PATH: {github_event_path}")
 print(f"GITHUB_EVENT_NAME: {github_event_name}")
 
+
+# TODO: Add enforcement of commit message format.
+# - https://github.com/lumapps/commit-message-validator
+
+# TODO: Choose bump2version or re-ver and add init action and other.
+
+
+# TODO: Add re-render actions.
 
 def main():
     # Handle repository dispatch events

@@ -1,8 +1,3 @@
-import os
-
-import logging
-from enum import Enum
-
 # get logger from .__init__.py
 
 # - https://medium.com/itrevolution/five-minute-devops-gitflow-best-practices-a6cd1265de24
@@ -11,8 +6,9 @@ from enum import Enum
 # - https://git.logikum.hu/flow/
 # - https://nvie.com/posts/a-successful-git-branching-model/
 
-from . import logger
 import subprocess
+
+from . import logger
 
 
 class UnknownException(Exception):
@@ -72,35 +68,52 @@ class GitConfigError(Exception):
         self.message = message
 
 
-def git_configure_user(name, email):
-    logger.info(f"Configuring git user name to {name}, and email to {email}")
+def git_configure(key, value):
+    logger.info(f"Configuring git {key} to {value}")
     try:
         _ = subprocess.run(
-            ["git", "config", "--global", "user.name", name],
+            ["git", "config", "--global", key, value],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             check=True
         )
     except subprocess.CalledProcessError as error:
-        logger.error("Error configuring git user name")
+        logger.error(f"Error configuring git key: {key} to value: {value}")
         logger.error("Return code: %d", error.returncode)
         logger.error("Stdout:\n%s", error.stdout.decode().strip())
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
-        raise GitConfigError("Error configuring git user name")
+        raise GitConfigError(f"Error configuring git key: {key} to value: {value}")
 
-    try:
-        _ = subprocess.run(
-            ["git", "config", "--global", "user.email", email],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=True
-        )
-    except subprocess.CalledProcessError as error:
-        logger.error("Error configuring git user email")
-        logger.error("Return code: %d", error.returncode)
-        logger.error("Stdout:\n%s", error.stdout.decode().strip())
-        logger.error("Stderr:\n%s", error.stderr.decode().strip())
-        raise GitConfigError("Error configuring git user email")
+
+# def git_configure_user(name, email):
+#     logger.info(f"Configuring git user name to {name}, and email to {email}")
+#     try:
+#         _ = subprocess.run(
+#             ["git", "config", "--global", "user.name", name],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.PIPE,
+#             check=True
+#         )
+#     except subprocess.CalledProcessError as error:
+#         logger.error("Error configuring git user name")
+#         logger.error("Return code: %d", error.returncode)
+#         logger.error("Stdout:\n%s", error.stdout.decode().strip())
+#         logger.error("Stderr:\n%s", error.stderr.decode().strip())
+#         raise GitConfigError("Error configuring git user name")
+#
+#     try:
+#         _ = subprocess.run(
+#             ["git", "config", "--global", "user.email", email],
+#             stdout=subprocess.PIPE,
+#             stderr=subprocess.PIPE,
+#             check=True
+#         )
+#     except subprocess.CalledProcessError as error:
+#         logger.error("Error configuring git user email")
+#         logger.error("Return code: %d", error.returncode)
+#         logger.error("Stdout:\n%s", error.stdout.decode().strip())
+#         logger.error("Stderr:\n%s", error.stderr.decode().strip())
+#         raise GitConfigError("Error configuring git user email")
 
 
 # class ReconcileDivergentBranches(Enum):
