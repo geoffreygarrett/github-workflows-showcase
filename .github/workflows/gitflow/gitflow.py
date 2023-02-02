@@ -5,6 +5,7 @@
 # - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 # - https://git.logikum.hu/flow/
 # - https://nvie.com/posts/a-successful-git-branching-model/
+# - https://medium.com/android-news/gitflow-with-github-c675aa4f606a
 
 import subprocess
 
@@ -274,7 +275,13 @@ def finish_release_branch(release_name):
     logger.info("Running command: git flow release finish %s", release_name)
     try:
         _ = subprocess.run(
-            ["git", "flow", "release", "finish", release_name],
+            # https://github.com/microsoft/vscode-remote-release/issues/3682
+            ["git", "flow", "release", "finish", release_name,
+             "-m", "Release %s" % release_name,
+             # "-n",  # no tag
+             # "-k",  # keep branch
+             # "-F"
+             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             check=True
