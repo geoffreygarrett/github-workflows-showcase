@@ -40,7 +40,7 @@ def start_feature(feature_name, github_repository):
 def finish_feature(feature_name, github_repository):
     # Finish a feature in GitFlow
     try:
-        run_command(f"git branch -D feature/{feature_name}")
+        run_command(f"git branch feature/{feature_name}")
         run_command(f"git flow feature finish {feature_name}")
         run_command("git push")
         logger.info(f"Feature '{feature_name}' finished successfully in repository '{github_repository}'.")
