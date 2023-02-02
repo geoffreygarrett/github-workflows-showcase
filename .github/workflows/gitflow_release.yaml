@@ -37,7 +37,7 @@ on:
           - finish_release
 #          - delete_release
 
-      release_version:
+      release_name:
         type: string
         description: Enter the name of the release branch
 
@@ -76,7 +76,7 @@ jobs:
               "sha": "${{ github.sha }}",
               "workflow": "${{ github.workflow }}",
               "inputs": {
-                "release_version": "${{ github.event.inputs.release_version }}",
+                "release_name": "${{ github.event.inputs.release_version }}",
                 "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
                 "downstream_scope": "${{ github.event.inputs.downstream_scope }}"
                 
