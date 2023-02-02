@@ -247,6 +247,11 @@ class ReleaseBranchMergeError(Exception):
         self.message = message
 
 
+class TagAlreadyExistsError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 def finish_release_branch(release_name):
     release_branch = "release/%s" % release_name
     logger.info("Tracking release branch %s", release_branch)
