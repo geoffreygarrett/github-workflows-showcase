@@ -6,6 +6,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+class FeatureNotFoundError(Exception):
+    pass
+
+
+class ReleaseNotFoundError(Exception):
+    pass
+
+
 def git_flow_init(github_token, github_workspace, github_repository):
     # Initialize GitFlow on repository
     try:
@@ -22,7 +30,7 @@ def start_feature(feature_name, github_repository):
     # Start a new feature in GitFlow
     try:
         run_command(f"git flow feature start {feature_name}")
-        run_command("git push --set-upstream origin feature/{feature_name}")
+        run_command(f"git push --set-upstream origin feature/{feature_name}")
         logger.info(f"Feature '{feature_name}' started successfully in repository '{github_repository}'.")
     except Exception as error:
         logger.error(
@@ -32,10 +40,11 @@ def start_feature(feature_name, github_repository):
 def finish_feature(feature_name, github_repository):
     # Finish a feature in GitFlow
     try:
-        run_command(f"git branch -D {feature_name}")
+        run_command(f"git branch -D feature/{feature_name}")
         run_command(f"git flow feature finish {feature_name}")
         run_command("git push")
         logger.info(f"Feature '{feature_name}' finished successfully in repository '{github_repository}'.")
+
     except Exception as error:
         logger.error(
             f"An error occurred while finishing the feature '{feature_name}' in repository '{github_repository}': {error}")
