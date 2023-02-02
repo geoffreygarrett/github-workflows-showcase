@@ -240,3 +240,61 @@ def start_release_branch(release_name):
         logger.error("Stdout:\n%s", error.stdout.decode().strip())
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
         raise error
+
+
+class ReleaseBranchMergeError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+def finish_release_branch(release_name):
+    release_branch = "release/%s" % release_name
+    logger.info("Tracking release branch %s", release_branch)
+    try:
+        _ = subprocess.run(
+            ["git", "flow", "release", "track", release_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error tracking release branch %s", release_branch)
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        message = "Error tracking release branch. \n"
+        message += "Make sure you have git and git flow installed and that you are in the root of a git repository."
+        raise FeatureBranchMergeError(message)
+
+    logger.info("Running command: git flow release finish %s", release_name)
+    try:
+        _ = subprocess.run(
+            ["git", "flow", "release", "finish", release_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error finishing release branch %s", release_branch)
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        if b"have diverged" in error.stderr:
+            message = "Branches 'develop' and 'origin/develop' have diverged."
+            message += "Resolve the conflict by running the following commands:\n"
+            message += "\t- git checkout develop\n"
+            message += "\t- git pull origin develop\n"
+            message += "\t- git checkout %s\n" % release_branch
+            message += "\t- git merge develop\n"
+            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow release finish %s\n" % release_name
+            raise ReleaseBranchMergeError(message)
+        if b"CONFLICT (content): Merge conflict in" in error.stdout:
+            message = "There are merge conflicts. Resolve the conflict by running the following commands:\n"
+            message += "\t- git checkout develop\n"
+            message += "\t- git pull origin develop\n"
+            message += "\t- git checkout %s\n" % release_branch
+            message += "\t- git merge develop\n"
+            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow release finish %s\n" % release_name
+            raise ReleaseBranchMergeError(message)
+        else:
+            raise error
