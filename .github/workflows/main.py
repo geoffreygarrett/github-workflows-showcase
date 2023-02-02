@@ -2,8 +2,8 @@ import os
 import json
 import logging
 
-from gitflow.gitflow import (git_flow_init, start_feature, finish_feature, delete_feature,
-                             start_release, finish_release, configure_user)
+from gitflow.gitflow import (git_flow_init, start_feature, finish_feature,
+                             start_release, finish_release, git_configure_user)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -37,7 +37,8 @@ def main():
             payload = json.load(f)
 
         # Initialize GitFlow
-        configure_user()  # github-actions[bot]
+        git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
+
         # change chdir to github_workspace
         os.chdir(github_workspace)
         git_flow_init(**options)
@@ -54,11 +55,11 @@ def main():
             # Finish feature
             finish_feature(payload['client_payload']['feature_name'], **options)
 
-        # Handle delete_feature event
-        elif payload['action'] == "delete_feature":
-
-            # Delete feature
-            delete_feature(payload['client_payload']['feature_name'], github_repository)
+        # # Handle delete_feature event
+        # elif payload['action'] == "delete_feature":
+        #
+        #     # Delete feature
+        #     delete_feature(payload['client_payload']['feature_name'], github_repository)
 
         # Handle start_release
         elif payload['action'] == "start_release":
