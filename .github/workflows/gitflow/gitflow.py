@@ -22,6 +22,14 @@ class GitPushError(Exception):
     pass
 
 
+class GitPullError(Exception):
+    pass
+
+
+# class GitConflict(GitPullError):
+#     pass
+
+
 def configure_user():
     # Configure user
     try:
@@ -66,7 +74,14 @@ def start_feature(feature_name, github_repository):
 def finish_feature(feature_name, github_repository):
     # Finish a feature in GitFlow
     try:
-        run_command(f"git branch feature/{feature_name}")
+        stdout, stderr = run_command(f"git pull")
+        if stderr:
+            raise GitPullError(f"Error while pulling '{feature_name}' from remote: {stderr.decode()}")
+
+        stdout, stderr = run_command(f"git branch feature/{feature_name}")
+        if stderr:
+            raise FeatureNotFoundError(f"Feature '{feature_name}' not found in repository '{github_repository}': {stderr.decode()}")
+
         run_command(f"git flow feature finish {feature_name}")
         stdout, stderr = run_command(f"git push --set-upstream origin develop")
         if stderr:
