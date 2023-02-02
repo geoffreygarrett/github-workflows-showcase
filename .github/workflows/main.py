@@ -41,7 +41,7 @@ def main():
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
-        git_flow_init(**options)
+        # git_flow_init(**options)
 
         # Handle start_feature event
         if payload['action'] == "start_feature":
