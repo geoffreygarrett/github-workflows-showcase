@@ -89,6 +89,11 @@ def git_configure_user(name, email):
 
 import re
 
+
+class GitFlowInitError(UnknownException):
+    pass
+
+
 def git_flow_init(**kwargs):
     log_command = kwargs.get("log_command", True)
     raise_error = kwargs.get("raise_error", True)
