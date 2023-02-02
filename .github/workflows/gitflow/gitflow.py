@@ -175,6 +175,11 @@ def start_feature(feature_name, **kwargs):
 class GitFlowFeatureFinishError(UnknownException):
     pass
 
+class ReconcileDivergentBranches(Exception):
+    MERGE = "merge"
+    REBASE = "rebase"
+    FAST_FORWARD = "fast-forward"
+
 
 @git_flow_init_wrapper
 def finish_feature(feature_name, **kwargs):
@@ -194,6 +199,7 @@ def finish_feature(feature_name, **kwargs):
     # http://danielkummer.github.io/git-flow-cheatsheet/
     log_command = kwargs.get("log_command", True)
     raise_error = kwargs.get("raise_error", True)
+    reconcile_divergent_branches = kwargs.get("reconcile_divergent_branches", ReconcileDivergentBranches.MERGE)
 
     feature_track_command = f"git flow feature track {feature_name}"  # <--------------
     stdout, stderr, return_code = run_command(feature_track_command)
@@ -210,9 +216,18 @@ def finish_feature(feature_name, **kwargs):
     if return_code != 0:
         if 'have diverged' in stderr.decode("utf-8"):
             # https://stackoverflow.com/questions/10197188/git-flow-branches-have-diverged
+            if reconcile_divergent_branches == ReconcileDivergentBranches.MERGE:
+                _, _, _ = run_command(f"git config pull.rebase false")
+            elif reconcile_divergent_branches == ReconcileDivergentBranches.REBASE:
+                _, _, _ = run_command(f"git config pull.rebase true")
+            elif reconcile_divergent_branches == ReconcileDivergentBranches.FAST_FORWARD:
+                _, _, _ = run_command(f"git config pull.ff only")
+
+                # stdout, stderr, return_code = run_command(feature_finish_command, raise_error=True)
+
             _, _, _ = run_command(f"git checkout develop && git pull origin develop")
             # _, _, _ = run_command(f"git flow feature rebase {feature_name}")
-            stdout, stderr, return_code = run_command(feature_finish_command, raise_error=True)
+            _, _, _ = run_command(feature_finish_command, raise_error=True)
 
         if log_command:
             logger.error(f"Error occurred while finishing feature '{feature_name}': {stderr}")

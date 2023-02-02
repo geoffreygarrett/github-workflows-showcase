@@ -3,7 +3,7 @@ import json
 import logging
 
 from gitflow.gitflow import (git_flow_init, start_feature, finish_feature,
-                             start_release, finish_release, git_configure_user)
+                             start_release, finish_release, git_configure_user, ReconcileDivergentBranches)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -26,9 +26,9 @@ def main():
     RAISE_ERROR = True
 
     options = {
-        "raise_error": RAISE_ERROR
+        "raise_error": RAISE_ERROR,
+        "reconcile_divergent_branches": ReconcileDivergentBranches.MERGE
     }
-
 
     # Handle repository dispatch events
     if github_event_name == "repository_dispatch":
