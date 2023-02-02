@@ -46,6 +46,7 @@ class GitFlowInitError(RunCommandError):
 
 
 def git_flow_init():
+    logger.info("Initializing git flow")
     try:
         result = subprocess.run(
             ["git", "flow", "init", "-d"],
@@ -67,6 +68,7 @@ class GitConfigError(Exception):
 
 
 def git_configure_user(name, email):
+    logger.info(f"Configuring git user name to {name}, and email to {email}")
     try:
         _ = subprocess.run(
             ["git", "config", "--global", "user.name", name],
@@ -140,6 +142,7 @@ class FeatureBranchMergeError(Exception):
 
 def finish_feature_branch(feature_name):
     feature_branch = "feature/%s" % feature_name
+    logger.info("Tracking feature branch %s", feature_branch)
     try:
         _ = subprocess.run(
             ["git", "flow", "feature", "track", feature_name],
@@ -156,6 +159,7 @@ def finish_feature_branch(feature_name):
         message += "Make sure you have git and git flow installed and that you are in the root of a git repository."
         raise FeatureBranchMergeError(message)
 
+    logger.info("Running command: git flow feature finish %s", feature_name)
     try:
         _ = subprocess.run(
             ["git", "flow", "feature", "finish", feature_name],

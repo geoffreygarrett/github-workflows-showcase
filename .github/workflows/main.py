@@ -40,15 +40,13 @@ def main():
 
         # Handle start_feature event
         if payload['action'] == "start_feature":
-
-            # Start feature
+            logger.info(f"Creating feature branch feature/{inputs['feature_name']} from develop")
             git_flow_init()
             start_feature_branch(inputs['feature_name'])
 
         # Handle finish_feature event
         elif payload['action'] == "finish_feature":
-
-            # Finish feature
+            logger.info(f"Merging feature/{inputs['feature_name']} into develop, then deleting feature")
             git_flow_init()
             finish_feature_branch(inputs['feature_name'])
 
