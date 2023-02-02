@@ -24,6 +24,7 @@
 #
 #git flow release finish '0.1.0'
 # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/Gitflow-release-branch-process-start-finish
+name: Gitflow Release
 
 on:
   workflow_dispatch:
