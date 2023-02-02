@@ -1,4 +1,5 @@
-from .run import run_command, os
+from .run import run_command
+import os
 import logging
 
 logger = logging.getLogger(__name__)
