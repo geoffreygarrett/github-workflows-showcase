@@ -5,7 +5,8 @@ import logging
 import requests
 from .actions.dispatch import trigger_repository_dispatch
 from .actions.run import run_command
-from .actions.gitflow import git_flow_init, start_feature, finish_feature, delete_feature
+from .actions.gitflow import (git_flow_init, start_feature, finish_feature, delete_feature,
+                              start_release, finish_release)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -52,6 +53,17 @@ def main():
             # Delete feature
             delete_feature(payload['client_payload']['feature_name'], github_repository)
 
+        # Handle start_release
+        elif payload['action'] == "start_release":
+
+            # Start release
+            start_release(payload['client_payload']['release_name'], github_repository)
+
+        # Handle finish_release
+        elif payload['action'] == "finish_release":
+
+            # Finish release
+            finish_release(payload['client_payload']['release_name'], github_repository)
 
 
 if __name__ == "__main__":
