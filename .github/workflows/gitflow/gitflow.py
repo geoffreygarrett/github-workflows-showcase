@@ -50,7 +50,11 @@ def run_command(command, **kwargs):
                 if "Command not found" in stderr.decode("utf-8"):
                     raise CommandNotFoundError(f"Command '{command}' not found")
                 else:
-                    raise RunCommandError(f"Command '{command}' returned non-zero status: {return_code}")
+                    raise RunCommandError(
+                        f"Command '{command}' returned non-zero status: {return_code}"
+                        f" with stderr: {stderr.decode('utf-8')}"
+                        f" and stdout: {stdout.decode('utf-8')}"
+                        )
         return stdout, stderr, return_code
     except Exception as e:
         if log_command:
