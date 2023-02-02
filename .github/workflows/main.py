@@ -2,8 +2,7 @@ import os
 import json
 import logging
 
-from gitflow.gitflow import (git_flow_init, start_feature, finish_feature,
-                             start_release, finish_release, git_configure_user, git_configure_reconcile_divergent_branches)
+from gitflow.gitflow import (git_flow_init, start_feature_branch, finish_feature_branch, git_configure_user)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,17 +21,7 @@ print(f"GITHUB_EVENT_PATH: {github_event_path}")
 print(f"GITHUB_EVENT_NAME: {github_event_name}")
 
 
-
-
 def main():
-    RAISE_ERROR = True
-
-    options = {
-        "raise_error": RAISE_ERROR,
-    }
-
-
-
     # Handle repository dispatch events
     if github_event_name == "repository_dispatch":
         # Read in payload
@@ -41,46 +30,27 @@ def main():
             # pretty print
             print(json.dumps(payload, indent=4, sort_keys=True))
 
-
         inputs = payload['client_payload']['inputs']
 
         # Configure git
         git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
-        git_configure_reconcile_divergent_branches(inputs['reconcile_divergence'], **options)
 
         # change chdir to github_workspace
         os.chdir(github_workspace)
-        # git_flow_init(**options)
 
         # Handle start_feature event
-        if payload['action'] == "start_feature":
+        if inputs['action'] == "start_feature":
 
             # Start feature
-            start_feature(inputs['feature_name'], **options)
+            git_flow_init()
+            start_feature_branch(inputs['feature_name'])
 
         # Handle finish_feature event
-        elif payload['action'] == "finish_feature":
+        elif inputs['action'] == "finish_feature":
 
             # Finish feature
-            finish_feature(inputs['feature_name'], **options)
-
-        # # Handle delete_feature event
-        # elif payload['action'] == "delete_feature":
-        #
-        #     # Delete feature
-        #     delete_feature(payload['client_payload']['feature_name'], github_repository)
-
-        # Handle start_release
-        elif payload['action'] == "start_release":
-
-            # Start release
-            start_release(inputs['release_name'], github_repository)
-
-        # Handle finish_release
-        elif payload['action'] == "finish_release":
-
-            # Finish release
-            finish_release(inputs['release_name'], github_repository)
+            git_flow_init()
+            finish_feature_branch(inputs['feature_name'])
 
 
 if __name__ == "__main__":
