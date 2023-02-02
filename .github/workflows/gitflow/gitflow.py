@@ -195,8 +195,8 @@ def finish_feature(feature_name, **kwargs):
     log_command = kwargs.get("log_command", True)
     raise_error = kwargs.get("raise_error", True)
 
-    command = f"git flow feature track {feature_name}"  # <--------------
-    stdout, stderr, return_code = run_command(command)
+    feature_track_command = f"git flow feature track {feature_name}"  # <--------------
+    stdout, stderr, return_code = run_command(feature_track_command)
 
     if return_code != 0:
         if log_command:
@@ -204,12 +204,19 @@ def finish_feature(feature_name, **kwargs):
         if raise_error:
             raise GitFlowFeatureFinishError(f"Error occurred while checking feature '{feature_name}': {stdout}")
 
-    command = f"git flow feature finish {feature_name}"  # <-------------
-    stdout, stderr, return_code = run_command(command)
+    feature_finish_command = f"git flow feature finish {feature_name}"  # <-------------
+    stdout, stderr, return_code = run_command(feature_finish_command, raise_error=False)
 
     if return_code != 0:
+        if 'have diverged' in stderr.decode("utf-8"):
+            # https://stackoverflow.com/questions/10197188/git-flow-branches-have-diverged
+            _, _, _ = run_command(f"git checkout develop && git pull origin")
+            _, _, _ = run_command(f"git flow feature rebase {feature_name}")
+            stdout, stderr, return_code = run_command(feature_finish_command, raise_error=True)
+
         if log_command:
             logger.error(f"Error occurred while finishing feature '{feature_name}': {stderr}")
+
         if raise_error:
             raise GitFlowFeatureFinishError(f"Error occurred while finishing feature '{feature_name}': {stdout}")
 
