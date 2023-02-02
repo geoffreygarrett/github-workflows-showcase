@@ -90,7 +90,10 @@ class GitReleasePullError(GitReleaseError):
     pass
 
 
-def configure_user(raise_error=False, log_error=True):
+def configure_user(**kwargs):
+    raise_error = kwargs.get("raise_error", False)
+    log_error = kwargs.get("log_error", True)
+
     """Configure user for Git operations"""
     try:
         stdout1, stderr1 = run_command("git config user.name github-actions[bot]")
@@ -112,8 +115,11 @@ def configure_user(raise_error=False, log_error=True):
             raise error
 
 
-def git_flow_init(raise_error=False):
+def git_flow_init(**kwargs):
+
     """Initialize Git Flow repository"""
+    raise_error = kwargs.get("raise_error", False)
+    log_error = kwargs.get("log_error", True)
     try:
         stdout, stderr = run_command("git flow init -d")
         if stderr:
@@ -128,8 +134,12 @@ def git_flow_init(raise_error=False):
         logger.error(f"An error occurred while initializing Git Flow repository: {error}")
 
 
-def start_feature(feature_name, raise_error=False):
+def start_feature(feature_name, **kwargs):
     """Start a new Git Flow feature"""
+
+    raise_error = kwargs.get("raise_error", False)
+    log_error = kwargs.get("log_error", True)
+
     try:
         stdout, stderr = run_command(f"git flow feature start {feature_name}")
         if stderr:
@@ -144,8 +154,10 @@ def start_feature(feature_name, raise_error=False):
         logger.error(f"An error occurred while starting Git Flow feature '{feature_name}': {error}")
 
 
-def finish_feature(feature_name, raise_error=False):
+def finish_feature(feature_name, **kwargs):
     """Finish an existing Git Flow feature"""
+    raise_error = kwargs.get("raise_error", False)
+    log_error = kwargs.get("log_error", True)
     try:
         stdout, stderr = run_command(f"git flow feature finish {feature_name}")
         if stderr:

@@ -23,6 +23,13 @@ print(f"GITHUB_EVENT_NAME: {github_event_name}")
 
 
 def main():
+    RAISE_ERROR = True
+
+    options = {
+        "raise_error": RAISE_ERROR
+    }
+
+
     # Handle repository dispatch events
     if github_event_name == "repository_dispatch":
         # Read in payload
@@ -33,19 +40,19 @@ def main():
         configure_user()  # github-actions[bot]
         # change chdir to github_workspace
         os.chdir(github_workspace)
-        git_flow_init(github_repository)
+        git_flow_init(**options)
 
         # Handle start_feature event
         if payload['action'] == "start_feature":
 
             # Start feature
-            start_feature(payload['client_payload']['feature_name'], github_repository)
+            start_feature(payload['client_payload']['feature_name'], **options)
 
         # Handle finish_feature event
         elif payload['action'] == "finish_feature":
 
             # Finish feature
-            finish_feature(payload['client_payload']['feature_name'], github_repository)
+            finish_feature(payload['client_payload']['feature_name'], **options)
 
         # Handle delete_feature event
         elif payload['action'] == "delete_feature":
