@@ -15,13 +15,15 @@ on:
         type: string
         description: Enter the name of the feature branch
         
-      scope:
-        type: choice
-        description: The scope of the feature
-        options:
-        - repository
-        - respoitory_and_upstream
-        - respoitory_and_downstream
+      upstream_scope:
+        type: integer
+        description: Enter the upstream scope of the release
+        default: 0
+
+      downstream_scope:
+        type: integer
+        description: Enter the downstream scope of the release
+        default: 0
 
 jobs:
   feature:

@@ -37,6 +37,20 @@ on:
           - finish_release
           - delete_release
 
+      release_name:
+        type: string
+        description: Enter the name of the release branch
+
+      upstream_scope:
+        type: integer
+        description: Enter the upstream scope of the release
+        default: 0
+
+      downstream_scope:
+        type: integer
+        description: Enter the downstream scope of the release
+        default: 0
+
 jobs:
   feature:
     runs-on: ubuntu-latest
