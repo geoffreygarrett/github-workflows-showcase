@@ -210,8 +210,8 @@ def finish_feature(feature_name, **kwargs):
     if return_code != 0:
         if 'have diverged' in stderr.decode("utf-8"):
             # https://stackoverflow.com/questions/10197188/git-flow-branches-have-diverged
-            _, _, _ = run_command(f"git checkout develop && git pull origin")
-            _, _, _ = run_command(f"git flow feature rebase {feature_name}")
+            _, _, _ = run_command(f"git checkout develop && git pull origin develop")
+            # _, _, _ = run_command(f"git flow feature rebase {feature_name}")
             stdout, stderr, return_code = run_command(feature_finish_command, raise_error=True)
 
         if log_command:
