@@ -13,7 +13,7 @@ jobs:
         run: |
           sudo apt-get install git-flow
 
-      - name: Set environment variables
+      - name: Run `main.py` script
         run: python .github/workflows/main.py
         env:
           GH_TOKEN: ${{ secrets.github_token }}

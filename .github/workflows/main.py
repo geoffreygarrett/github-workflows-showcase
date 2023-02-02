@@ -31,7 +31,9 @@ def main():
 
         # Initialize GitFlow
         configure_user()  # github-actions[bot]
-        git_flow_init(github_token, github_workspace, github_repository)
+        # change chdir to github_workspace
+        os.chdir(github_workspace)
+        git_flow_init(github_repository)
 
         # Handle start_feature event
         if payload['action'] == "start_feature":

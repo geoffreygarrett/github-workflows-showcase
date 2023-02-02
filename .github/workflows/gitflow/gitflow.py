@@ -31,12 +31,12 @@ def configure_user():
         logger.error(f"An error occurred while configuring user: {error}")
 
 
-def git_flow_init(github_token, github_workspace, github_repository):
+def git_flow_init(github_repository):
     # Initialize GitFlow on repository
     try:
-        run_command(
-            f"git clone https://x-access-token:{github_token}@github.com/{github_repository}.git {github_workspace}")
-        os.chdir(github_workspace)
+        # run_command(
+        #     f"git clone https://x-access-token:{github_token}@github.com/{github_repository}.git {github_workspace}")
+        # os.chdir(github_workspace)
         run_command("git flow init -d")
         logger.info(f"GitFlow initialized successfully for repository '{github_repository}'.")
     except Exception as error:
