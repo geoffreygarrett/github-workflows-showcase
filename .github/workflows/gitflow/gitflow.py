@@ -137,7 +137,7 @@ def finish_feature_branch(feature_name):
         logger.error("Return code: %d", error.returncode)
         logger.error("Stdout:\n%s", error.stdout.decode().strip())
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
-        message = "Error tracking feature branch. "
+        message = "Error tracking feature branch. \n"
         message += "Make sure you have git and git flow installed and that you are in the root of a git repository."
         raise FeatureBranchMergeError(message)
 
@@ -155,20 +155,20 @@ def finish_feature_branch(feature_name):
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
         if b"have diverged" in error.stderr:
             message = "Branches 'develop' and 'origin/develop' have diverged."
-            message += "Resolve the conflict by running the following commands:"
-            message += "\t- git checkout develop"
-            message += "\t- git pull origin develop"
-            message += "\t- git checkout %s" % feature_branch
-            message += "\t- git merge develop"
-            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow feature finish %s" % feature_name
+            message += "Resolve the conflict by running the following commands:\n"
+            message += "\t- git checkout develop\n"
+            message += "\t- git pull origin develop\n"
+            message += "\t- git checkout %s\n" % feature_branch
+            message += "\t- git merge develop\n"
+            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow feature finish %s\n" % feature_name
             raise FeatureBranchMergeError(message)
         if b"CONFLICT (content): Merge conflict in" in error.stdout:
-            message = "There are merge conflicts. Resolve the conflict by running the following commands:"
-            message += "\t- git checkout develop"
-            message += "\t- git pull origin develop"
-            message += "\t- git checkout %s" % feature_branch
-            message += "\t- git merge develop"
-            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow feature finish %s" % feature_name
+            message = "There are merge conflicts. Resolve the conflict by running the following commands:\n"
+            message += "\t- git checkout develop\n"
+            message += "\t- git pull origin develop\n"
+            message += "\t- git checkout %s\n" % feature_branch
+            message += "\t- git merge develop\n"
+            message += "\t- Resolve any conflicts (commit the changes) and then run: git flow feature finish %s\n" % feature_name
             raise FeatureBranchMergeError(message)
         else:
             raise error
