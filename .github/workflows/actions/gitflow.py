@@ -48,3 +48,26 @@ def delete_feature(feature_name, github_repository):
     except Exception as error:
         logger.error(
             f"An error occurred while deleting the feature '{feature_name}' in repository '{github_repository}': {error}")
+
+
+def start_release(release_name, github_repository):
+    # Start a new release in GitFlow
+    try:
+        run_command(f"git flow release start {release_name}")
+        run_command("git push --set-upstream origin release/{release_name}")
+        logger.info(f"Release '{release_name}' started successfully in repository '{github_repository}'.")
+    except Exception as error:
+        logger.error(
+            f"An error occurred while starting the release '{release_name}' in repository '{github_repository}': {error}")
+
+
+def finish_release(release_name, github_repository):
+    # Finish a release in GitFlow
+    try:
+        run_command(f"git branch -D release/{release_name}")
+        run_command(f"git flow release finish {release_name}")
+        run_command("git push")
+        logger.info(f"Release '{release_name}' finished successfully in repository '{github_repository}'.")
+    except Exception as error:
+        logger.error(
+            f"An error occurred while finishing the release '{release_name}' in repository '{github_repository}': {error}")
