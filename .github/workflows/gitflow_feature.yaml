@@ -7,14 +7,20 @@ on:
         type: choice
         description: Choose the action to perform
         options:
-        - start_feature
-        - finish_feature
-#        - delete_feature
+          - start_feature
+          - finish_feature
+      #        - delete_feature
 
       feature_name:
         type: string
-        description: Enter the name of the feature branch
-        
+        description: Enter the name of the feature
+        required: true
+
+      description:
+        type: string
+        description: Enter the description of the feature
+        required: true
+
       upstream_scope:
         type: integer
         description: Enter the upstream scope of the release

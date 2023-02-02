@@ -35,11 +35,16 @@ on:
         options:
           - start_release
           - finish_release
-#          - delete_release
 
       release_name:
         type: string
         description: Enter the name of the release branch
+        required: true
+
+      description:
+        type: string
+        description: Enter the description of the release
+        required: true
 
       upstream_scope:
         type: integer
