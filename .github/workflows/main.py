@@ -39,7 +39,7 @@ def main():
         with open(github_event_path, 'r') as f:
             payload = json.load(f)
 
-        reconcile_method = payload['client_payload']['reconcile_divergence']
+        reconcile_method = payload['reconcile_divergence']
 
         # Configure git
         git_configure_user(name='github-actions[bot]', email='github-actions@github.com')
