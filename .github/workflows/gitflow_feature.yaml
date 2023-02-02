@@ -62,7 +62,7 @@ jobs:
             "inputs": {
               "action": "${{ github.event.inputs.action }}",
               "feature_name": "${{ github.event.inputs.feature_name }}",
-              "feature_branch": "feature/${{ github.event.inputs.feature_name }}"
+              "feature_branch": "feature/${{ github.event.inputs.feature_name }}",
               "upstream_scope": "${{ github.event.inputs.upstream_scope }}",
               "downstream_scope": "${{ github.event.inputs.downstream_scope }}",
               "reconcile_divergence": "${{ github.event.inputs.reconcile_divergence }}",
