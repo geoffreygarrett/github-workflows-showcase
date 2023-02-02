@@ -104,7 +104,7 @@ def git_configure_user(name, email):
 
 def start_feature_branch(feature_name):
     try:
-        result = subprocess.run(
+        _ = subprocess.run(
             ["git", "flow", "feature", "start", feature_name],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -112,6 +112,21 @@ def start_feature_branch(feature_name):
         )
     except subprocess.CalledProcessError as error:
         logger.error("Error starting feature branch %s", feature_name)
+        logger.error("Return code: %d", error.returncode)
+        logger.error("Stdout:\n%s", error.stdout.decode().strip())
+        logger.error("Stderr:\n%s", error.stderr.decode().strip())
+        raise error
+
+    # push
+    try:
+        _ = subprocess.run(
+            ["git", "push", "--set-upstream", "origin", "feature/%s" % feature_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True
+        )
+    except subprocess.CalledProcessError as error:
+        logger.error("Error pushing feature branch %s", feature_name)
         logger.error("Return code: %d", error.returncode)
         logger.error("Stdout:\n%s", error.stdout.decode().strip())
         logger.error("Stderr:\n%s", error.stderr.decode().strip())
